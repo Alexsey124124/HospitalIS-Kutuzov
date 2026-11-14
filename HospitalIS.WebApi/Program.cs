@@ -1,5 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using HospitalIS.Application.Services.Doctor;
 using HospitalIS.Infrastructure.Data;
+using HospitalIS.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<HospitalDbContext>(opt =>
     opt.UseSqlite("Data Source=hospital.db"));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 var app = builder.Build();
 
