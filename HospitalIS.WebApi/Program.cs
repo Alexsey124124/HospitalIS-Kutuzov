@@ -1,4 +1,6 @@
 using HospitalIS.Application.Services.Doctor;
+using HospitalIS.Application.Services.Patients;
+using HospitalIS.Application.Services.Specializations;
 using HospitalIS.Infrastructure.Data;
 using HospitalIS.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,8 @@ builder.Services.AddDbContext<HospitalDbContext>(opt =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IDoctorService, DoctorService>();
-
+builder.Services.AddScoped<ISpecializationService, SpecializationService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -26,5 +29,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<HospitalDbContext>();
+    await DbSeeder.SeedAsync(context);
+}
 app.Run();
