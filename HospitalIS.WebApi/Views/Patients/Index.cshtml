@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HospitalIS.Application.DTOs.Patients.PatientDto>
+@{
+    ViewData["Title"] = "Пациенты";
+}
+
+<h2>Список пациентов</h2>
+<p><a href="/Patients/Create" class="btn btn-add">＋ Добавить пациента</a></p>
+
+<div class="toolbar" data-table-tools data-target="#patientsTable">
+    <input type="search" class="tool-search" placeholder="Поиск по фамилии, полису, телефону…" />
+    <select class="tool-sort">
+        <option value="">Сортировка…</option>
+        <option value="1:asc">Фамилия А→Я</option>
+        <option value="4:asc">Дата рождения ↑</option>
+        <option value="4:desc">Дата рождения ↓</option>
+    </select>
+    <button type="button" class="btn btn-ghost btn-sm tool-reset">Сброс</button>
+    <span class="badge tool-count"></span>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty">Пациенты не найдены.</div>
+}
+else
+{
+    <table id="patientsTable">
+        <thead><tr><th>ID</th><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Дата рождения</th><th>Полис</th><th>Телефон</th><th>Действия</th></tr></thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.LastName</td>
+                    <td>@p.FirstName</td>
+                    <td>@p.MiddleName</td>
+                    <td data-sort="@p.BirthDate.ToString("yyyy-MM-dd")">@p.BirthDate.ToString("dd.MM.yyyy")</td>
+                    <td>@p.PolicyNumber</td>
+                    <td>@p.Phone</td>
+                    <td>
+                        <a href="/Patients/Details/@p.Id" class="btn btn-view btn-sm">👁</a>
+                        <a href="/Patients/Edit/@p.Id" class="btn btn-edit btn-sm">✏</a>
+                        <a href="/Patients/DeleteConfirm/@p.Id" class="btn btn-del btn-sm">🗑</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

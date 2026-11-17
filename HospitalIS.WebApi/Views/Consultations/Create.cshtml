@@ -1,0 +1,43 @@
+﻿@model HospitalIS.Application.DTOs.Consultations.CreateConsultationDto
+@{
+    ViewData["Title"] = "Новая консультация";
+    var appointments = (IEnumerable<HospitalIS.Application.DTOs.Appointments.AppointmentDto>)ViewBag.Appointments;
+    var diagnoses = (IEnumerable<HospitalIS.Application.DTOs.Consultations.DiagnosisOption>)ViewBag.Diagnoses;
+}
+
+<h2><svg class="ic"><use href="#i-plus" /></svg> Провести консультацию</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-grid">
+        <div class="field span2">
+            <label asp-for="AppointmentId">Запись на приём (без проведённой консультации)</label>
+            <select asp-for="AppointmentId">
+                <option value="0">— выберите запись —</option>
+                @foreach (var a in appointments)
+                {
+                    <option value="@a.Id">@a.AppointmentDateTime.ToString("dd.MM.yyyy HH:mm") · @a.PatientName → @a.DoctorName</option>
+                }
+            </select>
+            <span asp-validation-for="AppointmentId" class="text-danger"></span>
+        </div>
+        <div class="field span2">
+            <label asp-for="DiagnosisId">Диагноз (можно выставить позже)</label>
+            <select asp-for="DiagnosisId">
+                <option value="">— без диагноза —</option>
+                @foreach (var d in diagnoses)
+                {
+                    <option value="@d.Id">@d.Label</option>
+                }
+            </select>
+        </div>
+        <div class="field span2">
+            <label asp-for="StartDateTime">Дата и время начала консультации</label>
+            <input asp-for="StartDateTime" type="datetime-local" />
+            <span asp-validation-for="StartDateTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-add"><svg class="ic"><use href="#i-save" /></svg> Создать</button>
+        <a href="/Consultations" class="btn btn-ghost"><svg class="ic"><use href="#i-back" /></svg> Отмена</a>
+    </div>
+</form>

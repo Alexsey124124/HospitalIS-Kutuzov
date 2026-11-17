@@ -1,0 +1,53 @@
+﻿@model HospitalIS.Application.DTOs.Appointments.CreateAppointmentDto
+@{
+    ViewData["Title"] = "Новая запись";
+}
+
+<h2><svg class="ic"><use href="#i-plus" /></svg> Записать на приём</h2>
+<form method="post" asp-controller="Appointments" asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-grid">
+        @if (User.IsPatient())
+        {
+            <input type="hidden" asp-for="PatientId" value="@User.UserId()" />
+            <div class="field span2">
+                <label>Пациент</label>
+                <input value="@User.FindFirst("FullName")?.Value" disabled />
+            </div>
+        }
+        else
+        {
+            <div class="field span2">
+                <label asp-for="PatientId">Пациент</label>
+                <select asp-for="PatientId">
+                    <option value="0">— выберите пациента —</option>
+                    @foreach (var p in ViewBag.Patients)
+                    {
+                        <option value="@p.Id">@p.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+        }
+        <div class="field span2">
+            <label asp-for="DoctorId">Врач</label>
+            <select asp-for="DoctorId">
+                <option value="0">— выберите врача —</option>
+                @foreach (var d in ViewBag.Doctors)
+                {
+                    <option value="@d.Id">@d.Name</option>
+                }
+            </select>
+            <span asp-validation-for="DoctorId" class="text-danger"></span>
+        </div>
+        <div class="field span2">
+            <label asp-for="AppointmentDateTime">Дата и время приёма</label>
+            <input asp-for="AppointmentDateTime" type="datetime-local" />
+            <span asp-validation-for="AppointmentDateTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-add"><svg class="ic"><use href="#i-save" /></svg> Создать запись</button>
+        <a href="/Appointments" class="btn btn-ghost"><svg class="ic"><use href="#i-back" /></svg> Отмена</a>
+    </div>
+</form>

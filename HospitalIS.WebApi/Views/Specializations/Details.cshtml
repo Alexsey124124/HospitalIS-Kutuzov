@@ -1,0 +1,12 @@
+﻿@model HospitalIS.Application.DTOs.Specializations.SpecializationDto
+@{
+    ViewData["Title"] = "Специальность";
+}
+
+<h2>Специальность</h2>
+<table class="kv">
+    <tr><th>ID</th><td>@Model.Id</td></tr>
+    <tr><th>Название</th><td>@Model.Name</td></tr>
+    <tr><th>Описание</th><td>@Model.Description</td></tr>
+</table>
+<p><a href="/Specializations/Edit/@Model.Id" class="btn btn-edit">✏ Редактировать</a><a href="/Specializations" class="btn btn-ghost">← Назад</a></p>

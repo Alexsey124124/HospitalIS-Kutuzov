@@ -1,0 +1,24 @@
+﻿@model HospitalIS.Application.DTOs.Doctor.CreateDoctorDto
+@{
+    ViewData["Title"] = "Редактирование врача"; var specs = (IEnumerable<SpecializationDto>)ViewBag.Specializations;
+}
+
+<h2>Редактировать врача</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="field"><label>Фамилия</label><input asp-for="LastName" /></div>
+    <div class="field"><label>Имя</label><input asp-for="FirstName" /></div>
+    <div class="field"><label>Отчество</label><input asp-for="MiddleName" /></div>
+    <div class="field"><label>Кабинет</label><input asp-for="OfficeNumber" /></div>
+    <div class="field">
+        <label>Специальность</label>
+        <select asp-for="SpecializationId">
+            @foreach (var s in specs)
+            {
+                <option value="@s.Id">@s.Name</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-edit">💾 Сохранить</button>
+    <a href="/Doctors" class="btn btn-ghost">Отмена</a>
+</form>

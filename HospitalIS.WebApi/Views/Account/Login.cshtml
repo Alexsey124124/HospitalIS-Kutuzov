@@ -1,0 +1,26 @@
+﻿@model HospitalIS.Application.DTOs.Auth.LoginDto
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div style="max-width:460px;margin:0 auto">
+    <h2>Вход в систему</h2>
+    <form method="post" asp-controller="Account" asp-action="Login">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="field"><label asp-for="Login">Логин</label><input asp-for="Login" autocomplete="username" /></div>
+        <div class="field"><label asp-for="Password">Пароль</label><input asp-for="Password" autocomplete="current-password" /></div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-add">Войти</button>
+            <a href="/Account/Register" class="btn btn-ghost">Регистрация</a>
+        </div>
+    </form>
+    <div class="card" style="margin-top:20px">
+        <h3>Демо-доступы</h3>
+        <ul class="sys-list">
+            <li><span>Администратор</span><b>admin / admin123</b></li>
+            <li><span>Врач</span><b>ivanov / password123</b></li>
+            <li><span>Пациент</span><b>petrov / password123</b></li>
+        </ul>
+    </div>
+</div>

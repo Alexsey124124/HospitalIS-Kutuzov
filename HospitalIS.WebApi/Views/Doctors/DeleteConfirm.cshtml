@@ -1,0 +1,14 @@
+﻿@model HospitalIS.Application.DTOs.Doctor.DoctorDto
+@{
+    ViewData["Title"] = "Удаление врача";
+}
+
+<h2>Удалить врача?</h2>
+<div class="danger-card">
+    <p><strong>@Model.LastName @Model.FirstName @Model.MiddleName</strong></p>
+    <p>Специальность: @Model.SpecializationName · Кабинет: @Model.OfficeNumber</p>
+</div>
+<form method="post">
+    <button type="submit" class="btn btn-del">✅ Да, удалить</button>
+    <a href="/Doctors" class="btn btn-ghost">Отмена</a>
+</form>

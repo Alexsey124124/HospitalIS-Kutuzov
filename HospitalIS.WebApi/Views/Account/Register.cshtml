@@ -1,0 +1,57 @@
+﻿@model HospitalIS.Application.DTOs.Auth.RegisterDto
+@{
+    ViewData["Title"] = "Регистрация";
+    var specs = (IEnumerable<HospitalIS.Application.DTOs.Specializations.SpecializationDto>)ViewBag.Specializations;
+}
+
+<h2>Регистрация</h2>
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-grid">
+        <div class="field"><label asp-for="LastName">Фамилия</label><input asp-for="LastName" /></div>
+        <div class="field"><label asp-for="FirstName">Имя</label><input asp-for="FirstName" /></div>
+        <div class="field"><label asp-for="MiddleName">Отчество</label><input asp-for="MiddleName" /></div>
+        <div class="field"><label asp-for="Phone">Телефон</label><input asp-for="Phone" /></div>
+        <div class="field"><label asp-for="Login">Логин</label><input asp-for="Login" autocomplete="username" /></div>
+        <div class="field">
+            <label asp-for="Role">Роль</label>
+            <select asp-for="Role">
+                <option value="Patient">Пациент</option>
+                <option value="Doctor">Врач</option>
+            </select>
+        </div>
+        <div class="field"><label asp-for="Password">Пароль</label><input asp-for="Password" autocomplete="new-password" /></div>
+        <div class="field"><label asp-for="ConfirmPassword">Повтор пароля</label><input asp-for="ConfirmPassword" autocomplete="new-password" /></div>
+    </div>
+
+    <div class="card" style="margin:14px 0">
+        <h3>Если вы пациент</h3>
+        <div class="form-grid">
+            <div class="field"><label asp-for="BirthDate">Дата рождения</label><input asp-for="BirthDate" type="date" /></div>
+            <div class="field"><label asp-for="PolicyNumber">Номер полиса</label><input asp-for="PolicyNumber" /></div>
+            <div class="field span2"><label asp-for="Email">Email</label><input asp-for="Email" /></div>
+        </div>
+    </div>
+
+    <div class="card" style="margin:14px 0">
+        <h3>Если вы врач</h3>
+        <div class="form-grid">
+            <div class="field">
+                <label asp-for="SpecializationId">Специальность</label>
+                <select asp-for="SpecializationId">
+                    <option value="">— выберите —</option>
+                    @foreach (var s in specs)
+                    {
+                        <option value="@s.Id">@s.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="field"><label asp-for="OfficeNumber">Кабинет</label><input asp-for="OfficeNumber" /></div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-add">Зарегистрироваться</button>
+        <a href="/Account/Login" class="btn btn-ghost">У меня есть аккаунт</a>
+    </div>
+</form>

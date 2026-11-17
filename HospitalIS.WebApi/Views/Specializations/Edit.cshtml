@@ -1,0 +1,13 @@
+﻿@model HospitalIS.Application.DTOs.Specializations.CreateSpecializationDto
+@{
+    ViewData["Title"] = "Редактирование специальности";
+}
+
+<h2>Редактировать специальность</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="field"><label>Название</label><input asp-for="Name" /></div>
+    <div class="field"><label>Описание</label><textarea asp-for="Description" rows="3"></textarea></div>
+    <button type="submit" class="btn btn-edit">💾 Сохранить</button>
+    <a href="/Specializations" class="btn btn-ghost">Отмена</a>
+</form>

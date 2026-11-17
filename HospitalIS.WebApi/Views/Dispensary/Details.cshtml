@@ -1,0 +1,23 @@
+﻿@model HospitalIS.Application.DTOs.Dispensary.DispensaryRecordDto
+@{
+    ViewData["Title"] = "Диспансерный учёт";
+}
+
+<h2><svg class="ic"><use href="#i-book" /></svg> Запись учёта №@Model.Id</h2>
+<div class="table-wrap kv">
+    <table>
+        <tr><th>Пациент</th><td>@Model.PatientName</td></tr>
+        <tr><th>Врач</th><td>@Model.DoctorName</td></tr>
+        <tr><th>Диагноз</th><td>@Model.DiagnosisName</td></tr>
+        <tr><th>Дата постановки</th><td>@Model.StartDate.ToString("dd.MM.yyyy")</td></tr>
+        <tr><th>Следующий визит</th><td>@Model.NextVisitDate.ToString("dd.MM.yyyy")</td></tr>
+        <tr><th>Статус</th><td><span class="status status-@EnumDisplay.Css(Model.Status)">@Model.Status</span></td></tr>
+    </table>
+</div>
+<div class="form-actions">
+    @if (!User.IsPatient())
+    {
+        <a href="/Dispensary/Edit/@Model.Id" class="btn btn-edit"><svg class="ic"><use href="#i-pencil" /></svg> Изменить</a>
+    }
+    <a href="/Dispensary" class="btn btn-ghost"><svg class="ic"><use href="#i-back" /></svg> Назад</a>
+</div>

@@ -1,0 +1,19 @@
+﻿@model HospitalIS.Application.DTOs.Diagnoses.CreateDiagnosisDto
+@{
+    ViewData["Title"] = "Редактирование диагноза";
+}
+
+<h2><svg class="ic"><use href="#i-pencil" /></svg> Редактировать диагноз</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-grid">
+        <div class="field"><label asp-for="MKBCode">Код МКБ-10</label><input asp-for="MKBCode" /><span asp-validation-for="MKBCode" class="text-danger"></span></div>
+        <div class="field"><label asp-for="Category">Категория</label><input asp-for="Category" /></div>
+        <div class="field span2"><label asp-for="Name">Название</label><input asp-for="Name" /><span asp-validation-for="Name" class="text-danger"></span></div>
+        <div class="field span2"><label asp-for="Description">Описание</label><textarea asp-for="Description" rows="3"></textarea></div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-edit"><svg class="ic"><use href="#i-save" /></svg> Сохранить</button>
+        <a href="/Diagnoses" class="btn btn-ghost"><svg class="ic"><use href="#i-back" /></svg> Отмена</a>
+    </div>
+</form>

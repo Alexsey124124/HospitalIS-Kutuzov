@@ -1,0 +1,39 @@
+﻿@model HospitalIS.Application.DTOs.Consultations.ConsultationDto
+@{
+    ViewData["Title"] = "Консультация №" + Model.Id;
+    var diagnoses = (IEnumerable<HospitalIS.Application.DTOs.Consultations.DiagnosisOption>)ViewBag.Diagnoses;
+}
+
+<h2><svg class="ic"><use href="#i-pencil" /></svg> Консультация №@Model.Id</h2>
+<div class="card" style="margin-bottom:18px">
+    <p><strong>@Model.PatientName</strong> → @Model.DoctorName · @Model.StartDateTime.ToString("dd.MM.yyyy HH:mm")</p>
+</div>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-grid">
+        <div class="field span2">
+            <label>Диагноз (МКБ-10)</label>
+            <select name="DiagnosisId">
+                <option value="">— без диагноза —</option>
+                @foreach (var d in diagnoses)
+                {
+                    <option value="@d.Id" selected="@(d.Id == Model.DiagnosisId)">@d.Label</option>
+                }
+            </select>
+        </div>
+        <div class="field span2">
+            <label>Статус консультации</label>
+            <select name="Status" asp-items="ViewBag.Statuses"></select>
+        </div>
+        <div class="field span2">
+            <label>Лечение / назначения (медицинская запись)</label>
+            <textarea name="TreatmentText" rows="5" placeholder="Назначения, рекомендации, препараты…">@Model.TreatmentText</textarea>
+            <span class="text-danger">Оставьте пустым, чтобы удалить медзапись.</span>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-edit"><svg class="ic"><use href="#i-save" /></svg> Сохранить</button>
+        <a href="/Consultations/Details/@Model.Id" class="btn btn-ghost">Отмена</a>
+    </div>
+</form>

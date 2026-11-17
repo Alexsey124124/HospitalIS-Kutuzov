@@ -1,0 +1,30 @@
+﻿@model HospitalIS.Application.DTOs.Diagnoses.DiagnosisDto
+@{
+    ViewData["Title"] = "Удаление диагноза";
+}
+
+<h2><svg class="ic"><use href="#i-warn" /></svg> Удалить диагноз?</h2>
+<div class="danger-card">
+    <p><strong>@Model.MKBCode — @Model.Name</strong></p>
+    @if (Model.UsageCount > 0)
+    {
+        <p class="text-danger">Удаление невозможно: диагноз используется в @Model.UsageCount записях (консультации/диспансерный учёт). Сначала измените эти записи.</p>
+    }
+    else
+    {
+        <p>Диагноз не используется — удаление безопасно.</p>
+    }
+</div>
+@if (Model.UsageCount == 0)
+{
+    <form method="post">
+        <div class="form-actions">
+            <button type="submit" class="btn btn-del"><svg class="ic"><use href="#i-trash" /></svg> Да, удалить</button>
+            <a href="/Diagnoses" class="btn btn-ghost">Отмена</a>
+        </div>
+    </form>
+}
+else
+{
+    <a href="/Diagnoses" class="btn btn-ghost">Вернуться к справочнику</a>
+}

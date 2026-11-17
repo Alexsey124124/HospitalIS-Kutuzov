@@ -1,0 +1,16 @@
+﻿@model HospitalIS.Application.DTOs.Consultations.ConsultationDto
+@{
+    ViewData["Title"] = "Удаление консультации";
+}
+
+<h2><svg class="ic"><use href="#i-warn" /></svg> Удалить консультацию?</h2>
+<div class="danger-card">
+    <p><strong>@Model.PatientName → @Model.DoctorName</strong>, @Model.StartDateTime.ToString("dd.MM.yyyy HH:mm")</p>
+    <p class="text-danger">Связанная медицинская запись будет удалена вместе с консультацией.</p>
+</div>
+<form method="post">
+    <div class="form-actions">
+        <button type="submit" class="btn btn-del"><svg class="ic"><use href="#i-trash" /></svg> Да, удалить</button>
+        <a href="/Consultations" class="btn btn-ghost">Отмена</a>
+    </div>
+</form>

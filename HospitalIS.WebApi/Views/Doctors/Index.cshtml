@@ -1,0 +1,48 @@
+﻿@model IEnumerable<HospitalIS.Application.DTOs.Doctor.DoctorDto>
+@{
+    ViewData["Title"] = "Врачи";
+}
+
+<h2>Список врачей</h2>
+<p><a href="/Doctors/Create" class="btn btn-add">＋ Добавить врача</a></p>
+
+<div class="toolbar" data-table-tools data-target="#doctorsTable">
+    <input type="search" class="tool-search" placeholder="Поиск по фамилии, специальности, кабинету…" />
+    <select class="tool-sort">
+        <option value="">Сортировка…</option>
+        <option value="1:asc">Фамилия А→Я</option>
+        <option value="1:desc">Фамилия Я→А</option>
+        <option value="5:asc">Кабинет ↑</option>
+    </select>
+    <button type="button" class="btn btn-ghost btn-sm tool-reset">Сброс</button>
+    <span class="badge tool-count"></span>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty">Врачи не найдены. Добавьте первого врача.</div>
+}
+else
+{
+    <table id="doctorsTable">
+        <thead><tr><th>ID</th><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Специальность</th><th>Кабинет</th><th>Действия</th></tr></thead>
+        <tbody>
+            @foreach (var d in Model)
+            {
+                <tr>
+                    <td>@d.Id</td>
+                    <td>@d.LastName</td>
+                    <td>@d.FirstName</td>
+                    <td>@d.MiddleName</td>
+                    <td>@d.SpecializationName</td>
+                    <td>@d.OfficeNumber</td>
+                    <td>
+                        <a href="/Doctors/Details/@d.Id" class="btn btn-view btn-sm">👁</a>
+                        <a href="/Doctors/Edit/@d.Id" class="btn btn-edit btn-sm">✏</a>
+                        <a href="/Doctors/DeleteConfirm/@d.Id" class="btn btn-del btn-sm">🗑</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

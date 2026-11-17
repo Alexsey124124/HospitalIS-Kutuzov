@@ -1,0 +1,18 @@
+﻿@model HospitalIS.Application.DTOs.Patients.CreatePatientDto
+@{
+    ViewData["Title"] = "Новый пациент";
+}
+
+<h2>Добавить пациента</h2>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="field"><label>Фамилия</label><input asp-for="LastName" /></div>
+    <div class="field"><label>Имя</label><input asp-for="FirstName" /></div>
+    <div class="field"><label>Отчество</label><input asp-for="MiddleName" /></div>
+    <div class="field"><label>Дата рождения</label><input asp-for="BirthDate" type="date" /></div>
+    <div class="field"><label>Номер полиса</label><input asp-for="PolicyNumber" /></div>
+    <div class="field"><label>Телефон</label><input asp-for="Phone" /></div>
+    <div class="field"><label>Email</label><input asp-for="Email" /></div>
+    <button type="submit" class="btn btn-add">💾 Сохранить</button>
+    <a href="/Patients" class="btn btn-ghost">Отмена</a>
+</form>

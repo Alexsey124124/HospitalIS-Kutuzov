@@ -1,0 +1,113 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h2><svg class="ic"><use href="#i-chart" /></svg> Панель управления</h2>
+
+<div class="stats">
+    <a class="stat" href="/Doctors">
+        <svg class="ic"><use href="#i-doctor" /></svg>
+        <span class="num">@Model.DoctorsCount</span>
+        <span class="lbl">Врачи</span>
+        <span class="sub">действующие специалисты</span>
+    </a>
+    <a class="stat" href="/Patients">
+        <svg class="ic"><use href="#i-users" /></svg>
+        <span class="num">@Model.PatientsCount</span>
+        <span class="lbl">Пациенты</span>
+        <span class="sub">зарегистрированы в системе</span>
+    </a>
+    <a class="stat" href="/Specializations">
+        <svg class="ic"><use href="#i-list" /></svg>
+        <span class="num">@Model.SpecializationsCount</span>
+        <span class="lbl">Специальности</span>
+        <span class="sub">направлений приёма</span>
+    </a>
+    <a class="stat" href="/Diagnoses">
+        <svg class="ic"><use href="#i-book" /></svg>
+        <span class="num">@Model.DiagnosesCount</span>
+        <span class="lbl">Диагнозы</span>
+        <span class="sub">справочник МКБ-10</span>
+    </a>
+</div>
+
+<div class="dash-grid">
+    <div class="card">
+        <h3><svg class="ic"><use href="#i-chart" /></svg> Распределение врачей по специальностям</h3>
+        @if (Model.Load.Count == 0)
+        {
+            <div class="empty">Данных пока нет.</div>
+        }
+        else
+        {
+            <div class="bars">
+                @foreach (var l in Model.Load)
+                {
+                    <div class="bar-row">
+                        <span class="name" title="@l.Name">@l.Name</span>
+                        <span class="bar-track"><span class="bar-fill" data-w="@l.Percent" style="background:linear-gradient(90deg,@(l.Hue),@(l.Hue))"></span></span>
+                        <span class="val">@l.Count</span>
+                    </div>
+                }
+            </div>
+        }
+        <h3 style="margin-top:22px"><svg class="ic"><use href="#i-book" /></svg> Справочник МКБ-10</h3>
+        <div class="dx-chips">
+            @foreach (var d in Model.Diagnoses)
+            {
+                <span class="dx"><b>@d.Code</b> @d.Name</span>
+            }
+        </div>
+    </div>
+
+    <div style="display:grid;gap:18px;align-content:start">
+        @if (User.IsAdmin())
+        {
+            <div class="card">
+                <h3><svg class="ic"><use href="#i-bolt" /></svg> Быстрые действия</h3>
+                <div class="quick">
+                    <a href="/Doctors/Create" class="btn btn-add"><svg class="ic"><use href="#i-plus" /></svg> Добавить врача</a>
+                    <a href="/Patients/Create" class="btn btn-view"><svg class="ic"><use href="#i-plus" /></svg> Добавить пациента</a>
+                    <a href="/Specializations/Create" class="btn btn-edit"><svg class="ic"><use href="#i-plus" /></svg> Добавить специальность</a>
+                </div>
+            </div>
+        }
+        @if (!User.IsPatient())
+        {
+            <div class="card">
+                <h3><svg class="ic"><use href="#i-users" /></svg> Последние пациенты</h3>
+                @if (Model.Recent.Count == 0)
+                {
+                    <div class="empty">Пациентов пока нет.</div>
+                }
+                else
+                {
+                    <table class="mini-table">
+                        <thead><tr><th>Пациент</th><th>Дата рожд.</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var p in Model.Recent)
+                            {
+                                <tr>
+                                    <td>@p.FullName</td>
+                                    <td>@p.Birth</td>
+                                    <td><a class="btn btn-view btn-sm" href="/Patients/Details/@p.Id"><svg class="ic"><use href="#i-eye" /></svg></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        }
+        <div class="card">
+            <h3><svg class="ic"><use href="#i-db" /></svg> Состояние системы</h3>
+            <ul class="sys-list">
+                <li><span>Платформа</span><b>.NET 10 · ASP.NET Core MVC</b></li>
+                <li><span>Доступ к данным</span><b>EF Core · SQLite</b></li>
+                <li><span>Записей в базе</span><b>@Model.TotalRecords</b></li>
+                <li><span>Модульные тесты</span><b>4 пройдено</b></li>
+                <li><span>Архитектура</span><b>Domain · Application · Infrastructure</b></li>
+            </ul>
+        </div>
+    </div>
+</div>

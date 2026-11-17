@@ -1,0 +1,16 @@
+﻿@model HospitalIS.Application.DTOs.Dispensary.DispensaryRecordDto
+@{
+    ViewData["Title"] = "Удаление учёта";
+}
+
+<h2><svg class="ic"><use href="#i-warn" /></svg> Снять с учёта безвозвратно?</h2>
+<div class="danger-card">
+    <p><strong>@Model.PatientName</strong> · @Model.DiagnosisName</p>
+    <p>Врач: @Model.DoctorName · статус: @Model.Status</p>
+</div>
+<form method="post">
+    <div class="form-actions">
+        <button type="submit" class="btn btn-del"><svg class="ic"><use href="#i-trash" /></svg> Да, удалить</button>
+        <a href="/Dispensary" class="btn btn-ghost">Отмена</a>
+    </div>
+</form>

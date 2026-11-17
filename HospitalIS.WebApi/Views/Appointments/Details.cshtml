@@ -1,0 +1,29 @@
+﻿@model HospitalIS.Application.DTOs.Appointments.AppointmentDto
+@{
+    ViewData["Title"] = "Запись на приём"; var st = (AppointmentStatus)Model.Status;
+}
+
+<h2><svg class="ic"><use href="#i-list" /></svg> Запись №@Model.Id</h2>
+<div class="table-wrap kv">
+    <table>
+        <tr><th>Пациент</th><td><a href="/Patients/Details/@Model.PatientId">@Model.PatientName</a></td></tr>
+        <tr><th>Врач</th><td><a href="/Doctors/Details/@Model.DoctorId">@Model.DoctorName</a></td></tr>
+        <tr><th>Дата и время</th><td>@Model.AppointmentDateTime.ToString("dd.MM.yyyy HH:mm")</td></tr>
+        <tr><th>Статус</th><td><span class="status status-@EnumDisplay.Css(st)">@EnumDisplay.Text(st)</span></td></tr>
+        <tr><th>Создана</th><td>@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td></tr>
+    </table>
+</div>
+
+<div class="card status-card" style="max-width:720px;margin-top:18px">
+    <h3>Изменить статус</h3>
+    <form method="post" action="/Appointments/ChangeStatus" class="inline-form">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <select name="status" asp-items="ViewBag.Statuses" aria-label="Новый статус"></select>
+        <button type="submit" class="btn btn-edit btn-sm"><svg class="ic"><use href="#i-save" /></svg> Применить</button>
+    </form>
+</div>
+
+<div class="form-actions">
+    <a href="/Appointments/DeleteConfirm/@Model.Id" class="btn btn-del"><svg class="ic"><use href="#i-trash" /></svg> Удалить запись</a>
+    <a href="/Appointments" class="btn btn-ghost"><svg class="ic"><use href="#i-back" /></svg> Назад к списку</a>
+</div>

@@ -1,0 +1,14 @@
+﻿@model HospitalIS.Application.DTOs.Specializations.SpecializationDto
+@{
+    ViewData["Title"] = "Удаление специальности";
+}
+
+<h2>Удалить специальность?</h2>
+<div class="danger-card">
+    <p><strong>@Model.Name</strong></p>
+    <p>@Model.Description</p>
+</div>
+<form method="post">
+    <button type="submit" class="btn btn-del"> Да, удалить</button>
+    <a href="/Specializations" class="btn btn-ghost">Отмена</a>
+</form>

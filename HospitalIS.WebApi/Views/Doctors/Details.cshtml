@@ -1,0 +1,15 @@
+﻿@model HospitalIS.Application.DTOs.Doctor.DoctorDto
+@{
+    ViewData["Title"] = "Врач";
+}
+
+<h2>Информация о враче</h2>
+<table class="kv">
+    <tr><th>ID</th><td>@Model.Id</td></tr>
+    <tr><th>Фамилия</th><td>@Model.LastName</td></tr>
+    <tr><th>Имя</th><td>@Model.FirstName</td></tr>
+    <tr><th>Отчество</th><td>@Model.MiddleName</td></tr>
+    <tr><th>Специальность</th><td>@Model.SpecializationName</td></tr>
+    <tr><th>Кабинет</th><td>@Model.OfficeNumber</td></tr>
+</table>
+<p><a href="/Doctors/Edit/@Model.Id" class="btn btn-edit">✏ Редактировать</a><a href="/Doctors" class="btn btn-ghost">← Назад</a></p>

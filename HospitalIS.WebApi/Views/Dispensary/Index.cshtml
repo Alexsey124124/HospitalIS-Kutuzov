@@ -1,0 +1,46 @@
+﻿@model IEnumerable<HospitalIS.Application.DTOs.Dispensary.DispensaryRecordDto>
+@{
+    ViewData["Title"] = "Диспансерный учёт";
+}
+
+<h2><svg class="ic"><use href="#i-book" /></svg> Диспансерный учёт</h2>
+@if (User.IsDoctor() || User.IsAdmin())
+{
+    <p><a href="/Dispensary/Create" class="btn btn-add"><svg class="ic"><use href="#i-plus" /></svg> Поставить на учёт</a></p>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty">Записей диспансерного учёта пока нет.</div>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Пациент</th><th>Врач</th><th>Диагноз</th><th>Постановка</th><th>След. визит</th><th>Статус</th><th>Действия</th></tr></thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.Id</td>
+                        <td><strong>@r.PatientName</strong></td>
+                        <td>@r.DoctorName</td>
+                        <td>@r.DiagnosisName</td>
+                        <td>@r.StartDate.ToString("dd.MM.yyyy")</td>
+                        <td>@r.NextVisitDate.ToString("dd.MM.yyyy")</td>
+                        <td><span class="status status-@EnumDisplay.Css(r.Status)">@r.Status</span></td>
+                        <td>
+                            <span class="row-actions">
+                                <a href="/Dispensary/Details/@r.Id" class="btn btn-view btn-sm">Открыть</a>
+                                @if (!User.IsPatient())
+                                {
+                                    <a href="/Dispensary/Edit/@r.Id" class="btn btn-edit btn-sm">Изменить</a>
+                                }
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

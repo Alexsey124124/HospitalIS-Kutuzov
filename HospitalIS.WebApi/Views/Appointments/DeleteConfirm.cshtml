@@ -1,0 +1,17 @@
+﻿@model HospitalIS.Application.DTOs.Appointments.AppointmentDto
+@{
+    ViewData["Title"] = "Удаление записи";
+}
+
+<h2><svg class="ic"><use href="#i-warn" /></svg> Удалить запись?</h2>
+<div class="danger-card">
+    <p><strong>@Model.PatientName → @Model.DoctorName</strong></p>
+    <p>Приём: @Model.AppointmentDateTime.ToString("dd.MM.yyyy HH:mm")</p>
+    <p class="text-danger">Внимание: связанные с этой записью консультации будут удалены каскадно (ограничение БД).</p>
+</div>
+<form method="post">
+    <div class="form-actions">
+        <button type="submit" class="btn btn-del"><svg class="ic"><use href="#i-trash" /></svg> Да, удалить</button>
+        <a href="/Appointments" class="btn btn-ghost">Отмена</a>
+    </div>
+</form>

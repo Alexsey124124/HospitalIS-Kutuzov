@@ -1,0 +1,45 @@
+﻿@model IEnumerable<HospitalIS.Application.DTOs.Diagnoses.DiagnosisDto>
+@{
+    ViewData["Title"] = "Справочник диагнозов";
+}
+
+<h2><svg class="ic"><use href="#i-book" /></svg> Справочник диагнозов (МКБ-10)</h2>
+@if (User.IsAdmin())
+{
+    <p><a href="/Diagnoses/Create" class="btn btn-add"><svg class="ic"><use href="#i-plus" /></svg> Добавить диагноз</a></p>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty">Справочник пуст.</div>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Код МКБ</th><th>Название</th><th>Категория</th><th>Используется</th><th>Действия</th></tr></thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td>@d.Id</td>
+                        <td><strong>@d.MKBCode</strong></td>
+                        <td>@d.Name</td>
+                        <td>@d.Category</td>
+                        <td><span class="count-pill @(d.UsageCount == 0 ? "zero" : "")">@d.UsageCount</span></td>
+                        <td>
+                            <span class="row-actions">
+                                <a href="/Diagnoses/Details/@d.Id" class="btn btn-view btn-sm">Открыть</a>
+                                @if (User.IsAdmin())
+                                {
+                                    <a href="/Diagnoses/Edit/@d.Id" class="btn btn-edit btn-sm">Изменить</a>
+                                    <a href="/Diagnoses/DeleteConfirm/@d.Id" class="btn btn-del btn-sm">Удалить</a>
+                                }
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,55 +1,67 @@
-﻿using HospitalIS.Application.DTOs.Doctor;
-using HospitalIS.Application.Services.Doctor;
+﻿using HospitalIS.Infrastructure.Data;
+using HospitalIS.WebApi.Models;  
+using HospitalIS.WebApi.Security;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalIS.WebApi.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DoctorsController : ControllerBase
+public class HomeController : Controller
 {
-    private readonly IDoctorService _doctorService;
-
-    public DoctorsController(IDoctorService doctorService)
+    private static readonly string[] Hues =
     {
-        _doctorService = doctorService;
-    }
+        "#0f7f8b", "#2f6bff", "#17c07a", "#ffb020", "#e0344a", "#7a5cff", "#22c3e6", "#ff8a3d"
+    };
 
-    
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    private readonly HospitalDbContext _db;
+    public HomeController(HospitalDbContext db) => _db = db;
+
+    public async Task<IActionResult> Index()
     {
-        var doctors = await _doctorService.GetAllAsync();
-        return Ok(doctors);
-    }
+        if (User.IsPatient()) return RedirectToAction("Index", "Appointments");
 
-    
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(long id)
-    {
-        var doctor = await _doctorService.GetByIdAsync(id);
-        if (doctor == null)
-            return NotFound(new { message = "Врач не найден" });
+        var specs = await _db.Specializations.OrderBy(s => s.Id).ToListAsync();
+        var grouped = await _db.Doctors
+            .GroupBy(d => d.SpecializationId)
+            .Select(g => new { SpecId = g.Key, Count = g.Count() })
+            .ToListAsync();
 
-        return Ok(doctor);
-    }
-
-    
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDoctorDto dto)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        try
+        var load = specs.Select((s, i) =>
         {
-            var createdDoctor = await _doctorService.CreateAsync(dto);
-            
-            return CreatedAtAction(nameof(GetById), new { id = createdDoctor.Id }, createdDoctor);
-        }
-        catch (Exception ex)
+            var count = grouped.FirstOrDefault(g => g.SpecId == s.Id)?.Count ?? 0;
+            return new DashboardViewModel.SpecLoad(s.Name, count, Hues[i % Hues.Length], 0);
+        }).ToList();
+
+        var max = Math.Max(1, load.Count == 0 ? 1 : load.Max(l => l.Count));
+        load = load.Select(l => l with { Percent = (int)Math.Round(100.0 * l.Count / max) }).ToList();
+
+        var recent = await _db.Patients
+            .OrderByDescending(p => p.Id)
+            .Take(5)
+            .Select(p => new DashboardViewModel.RecentPatient(
+                p.Id,
+                p.LastName + " " + p.FirstName + " " + p.MiddleName,
+                p.BirthDate.ToString("dd.MM.yyyy"),
+                p.PolicyNumber))
+            .ToListAsync();
+
+        var diagnoses = await _db.Diagnoses
+            .OrderBy(d => d.MKBCode)
+            .Take(6)
+            .Select(d => new DashboardViewModel.DiagnosisRow(d.MKBCode, d.Name, d.Category))
+            .ToListAsync();
+
+        var vm = new DashboardViewModel
         {
-            return BadRequest(new { message = ex.Message });
-        }
+            DoctorsCount = await _db.Doctors.CountAsync(),
+            PatientsCount = await _db.Patients.CountAsync(),
+            SpecializationsCount = specs.Count,
+            DiagnosesCount = await _db.Diagnoses.CountAsync(),
+            Load = load,
+            Recent = recent,
+            Diagnoses = diagnoses
+        };
+        vm.TotalRecords = vm.DoctorsCount + vm.PatientsCount + vm.SpecializationsCount + vm.DiagnosesCount;
+        return View(vm);
     }
 }
